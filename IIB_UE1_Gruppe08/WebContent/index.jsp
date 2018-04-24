@@ -9,10 +9,12 @@
 </head>
 <body>
          <form methode="post" action="Connection">
-                 <label for="login">Login:</label>    <input type="text" name="login"> <br>
-                     <label for="userPassword">Password :</label> <input type="password" name="password"> <br>
-                        <input type="submit" value="Submit">
-                               </form>
+         <pre>
+              <label for="login">Login:</label>   <input type="text" name="login"> <br>
+          <label for="userPassword">Password :</label>   <input type="password" name="password"> <br>
+                                    <input type="submit" value="Submit">
+                 </pre>
+          </form>
  
 </body>
 </html>
