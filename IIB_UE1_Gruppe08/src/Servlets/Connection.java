@@ -26,7 +26,7 @@ public class Connection extends HttpServlet {
     public Connection() {
         super();
         // TODO Auto-generated constructor stub
-        //git test
+        
     }
 
 	/**
