@@ -1,0 +1,152 @@
+create database iib2_ue1_gruppe08;
+use iib2_ue1_gruppe08;
+CREATE TABLE address (
+  address_id int(11) NOT NULL auto_increment,
+  address_country varchar(45) DEFAULT NULL,
+  address_Stadt varchar(45) DEFAULT NULL,
+  address_zipcode varchar(45) DEFAULT NULL,
+  address_strasse varchar(45) DEFAULT NULL,
+  PRIMARY KEY (address_id) );
+select * from address;
+INSERT INTO `address` VALUES 
+(1,'Deutchland','Dietzenbach','63128','Steinberg 60'),
+(2,'Deutchland','Darmstadt','64287','Franziska-Braun-Straße 10'),
+(3,'Deutchland','Frankfurt','60629','Theodor-W.-Adorno-Platz 6'),
+(4,'Deutchland','Berlin','10117','Friedrichstraße 43'),
+(5,'Deutchland','Darmstadt',' 64283','Luisenpl. 5');
+
+CREATE TABLE `taetigkeit` (
+  `taetigkeit_id` int(11) NOT NULL,
+  `taetigkeit_name` varchar(32) NOT NULL,
+  PRIMARY KEY (`taetigkeit_id`),
+  UNIQUE KEY `person_id_UNIQUE` (`taetigkeit_id`)
+);
+INSERT INTO `taetigkeit` VALUES (1,'Bauleiter'),(2,'Nachtragmanager');
+
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL,
+  `user_vorname` varchar(16) NOT NULL,
+  `user_nachname` varchar(45) NOT NULL,
+  `user_tel` varchar(16) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `user_taetigkeit_id` int(11) NOT NULL,
+  `user_address_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `fk_user_taetigkeit_idx` (`user_taetigkeit_id`),
+  KEY `fk_user_address1_idx` (`user_address_id`),
+  CONSTRAINT `fk_user_address1` FOREIGN KEY (`user_address_id`) REFERENCES `address` (`address_id`),
+  CONSTRAINT `fk_user_taetigkeit` FOREIGN KEY (`user_taetigkeit_id`) REFERENCES `taetigkeit` (`taetigkeit_id`)
+);
+INSERT INTO `user` VALUES (1,'Jack','Morgen','031256489','j.morgen@xxx.xom',1,1),
+(2,'Anne','Vidne','01232569','a.vid@test.tes',1,2),
+(3,'Herr','Nachtragmanager','08-956524-2','h.manager@herr.man',2,3),
+(4,'Frau','Nachtragmanager','00528-255256','f.manager@frau.man',2,3);
+
+CREATE TABLE `login` (
+  `login_id` int(11) NOT NULL,
+  `login_username` varchar(16) NOT NULL,
+  `login_password` varchar(32) NOT NULL,
+  `login_user_id` int(11) NOT NULL,
+  PRIMARY KEY (`login_id`),
+  UNIQUE KEY `login_id_UNIQUE` (`login_id`),
+  KEY `fk_login_user1_idx` (`login_user_id`),
+  CONSTRAINT `fk_login_user1` FOREIGN KEY (`login_user_id`)
+  REFERENCES `user` (`user_id`)
+);
+INSERT INTO `login` VALUES (1,'user1','111111',1),
+(2,'user2','222222',2),(3,'N.Manager','333333',3),
+(4,'Frau.N.Manager','444444',4);
+
+CREATE TABLE `project` (
+  `project_id` int(11) NOT NULL,
+  `project_name` varchar(45) NOT NULL,
+  `project_anfang` datetime DEFAULT NULL,
+  `project_end` datetime DEFAULT NULL,
+  `project_address_id` int(11) NOT NULL,
+  PRIMARY KEY (`project_id`),
+  UNIQUE KEY `project_id_UNIQUE` (`project_id`),
+  KEY `fk_project_address1_idx` (`project_address_id`),
+  CONSTRAINT `fk_project_address1` FOREIGN KEY (`project_address_id`) REFERENCES `address` (`address_id`)
+);
+INSERT INTO `project` VALUES (1,'100B Hochhaus ','2017-01-01 00:00:00','2020-01-01 00:00:00',4),
+(2,'Darmstadt Brückenbau','2016-01-01 00:00:00','2018-01-01 00:00:00',5);
+
+CREATE TABLE `user_hat_project` (
+  `user_hat_project_id` int(11) NOT NULL,
+  `user_hat_project_user_id` int(11) NOT NULL,
+  `user_hat_project_project_id` int(11) NOT NULL,
+  `user_hat_project_auftragnehmer_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`user_hat_project_id`,`user_hat_project_user_id`,`user_hat_project_project_id`),
+  UNIQUE KEY `user_hat_project_id_UNIQUE` (`user_hat_project_id`),
+  KEY `fk_user_has_project_project1_idx` (`user_hat_project_project_id`),
+  KEY `fk_user_has_project_user1_idx` (`user_hat_project_user_id`),
+  CONSTRAINT `fk_user_has_project_project1` FOREIGN KEY (`user_hat_project_project_id`) REFERENCES `project` (`project_id`),
+  CONSTRAINT `fk_user_has_project_user1` FOREIGN KEY (`user_hat_project_user_id`) REFERENCES `user` (`user_id`)
+);
+INSERT INTO `user_hat_project` VALUES (1,1,1,'GMC GmbH'),(2,2,1,'GMC GmbH'),
+(3,3,2,'Ari Co.'),(4,4,1,'Ari Co.');
+
+CREATE TABLE `position` (
+  `position_id` int(11) NOT NULL,
+  `position_name` varchar(45) NOT NULL,
+  `position_beschreibung` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`position_id`),
+  UNIQUE KEY `project_id_UNIQUE` (`position_id`)
+);
+INSERT INTO `position` VALUES (1,'1 Geschoss','Teil A'),
+(2,'1 Geschoss','Teil A'),
+(3,'2 Geschoss','Teil A'),(4,'C.1','West');
+
+CREATE TABLE `bauteil` (
+  `bauteil_id` int(11) NOT NULL,
+  `project_name` varchar(45) NOT NULL,
+  `bauteil_project_id` int(11) NOT NULL,
+  `bauteil_position_id` int(11) NOT NULL,
+  PRIMARY KEY (`bauteil_id`,`bauteil_position_id`),
+  UNIQUE KEY `project_id_UNIQUE` (`bauteil_id`),
+  KEY `fk_bauteil_project1_idx` (`bauteil_project_id`),
+  KEY `fk_bauteil_position1_idx` (`bauteil_position_id`),
+  CONSTRAINT `fk_bauteil_position1` FOREIGN KEY (`bauteil_position_id`) REFERENCES `position` (`position_id`),
+  CONSTRAINT `fk_bauteil_project1` FOREIGN KEY (`bauteil_project_id`) REFERENCES `project` (`project_id`)
+);
+INSERT INTO `bauteil` VALUES (1,'Wand',1,1),
+(2,'Fenster',1,2),(3,'Dach',1,3),(4,'Stuetz',2,4);
+
+CREATE TABLE `nachtrag` (
+  `nachtrag_id` int(11) NOT NULL,
+  `nachtrag_titel` varchar(255) NOT NULL,
+  `nachtrag_datum` datetime DEFAULT NULL,
+  `nachtrag_beschreibung` varchar(100) DEFAULT NULL,
+  `nachtrag_vob` varchar(45) DEFAULT NULL,
+  `nachtrag_verursacher` varchar(45) DEFAULT NULL,
+  `nachtrag_frist` datetime DEFAULT NULL,
+  `nachtrag_bauteil_id` int(11) NOT NULL,
+  `nachtrag_position_id` int(11) NOT NULL,
+  PRIMARY KEY (`nachtrag_id`),
+  KEY `fk_nachtrag_bauteil1_idx` (`nachtrag_bauteil_id`,`nachtrag_position_id`),
+  CONSTRAINT `fk_nachtrag_bauteil1` FOREIGN KEY (`nachtrag_bauteil_id`, `nachtrag_position_id`) REFERENCES `bauteil` (`bauteil_id`, `bauteil_position_id`)
+);
+
+CREATE TABLE `kalkulation` (
+  `kalkulation_id` int(11) NOT NULL,
+  `kalkulation_menge` double DEFAULT NULL,
+  `kalkulation_einheit` varchar(8) DEFAULT NULL,
+  `kalkulation_preis_einheit` double DEFAULT NULL,
+  `kalkulation_preis_gesamt` double DEFAULT NULL,
+  `kalkulation_nachtrag_id` int(11) NOT NULL,
+  PRIMARY KEY (`kalkulation_id`,`kalkulation_nachtrag_id`),
+  UNIQUE KEY `project_id_UNIQUE` (`kalkulation_id`),
+  KEY `fk_kalkulation_nachtrag1_idx` (`kalkulation_nachtrag_id`),
+  CONSTRAINT `fk_kalkulation_nachtrag1` FOREIGN KEY (`kalkulation_nachtrag_id`) REFERENCES `nachtrag` (`nachtrag_id`)
+);
+
+CREATE TABLE `pruefung` (
+  `pruefung_id` int(11) NOT NULL,
+  `pruefung_ergebnis` varchar(45) NOT NULL,
+  `pruefung_datum` datetime DEFAULT NULL,
+  `pruefung_nachtrag_id` int(11) NOT NULL,
+  PRIMARY KEY (`pruefung_id`,`pruefung_nachtrag_id`),
+  UNIQUE KEY `project_id_UNIQUE` (`pruefung_id`),
+  KEY `fk_pruefung_nachtrag1_idx` (`pruefung_nachtrag_id`),
+  CONSTRAINT `fk_pruefung_nachtrag1` FOREIGN KEY (`pruefung_nachtrag_id`) REFERENCES `nachtrag` (`nachtrag_id`));
