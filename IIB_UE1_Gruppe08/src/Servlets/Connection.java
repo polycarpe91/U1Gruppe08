@@ -66,6 +66,7 @@ public class Connection extends HttpServlet {
 		String password=request.getParameter("password");
 		RequestDispatcher dispatcher;
 		try {
+			//MySQL Connection
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/iib2_ue1_gruppe08?useSSL=false", "root", "root");
 			java.sql.Statement st = con.createStatement();
