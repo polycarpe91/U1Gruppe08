@@ -10,6 +10,8 @@
 <body>
          <form methode="post" action="Connection">
          <pre>
+<a href="home.jsp"> HOME</a>
+         
               <label for="login">Login:</label>   <input type="text" name="login"> <br>
           <label for="userPassword">Password :</label>   <input type="password" name="password"> <br>
                                     <input type="submit" value="Submit">

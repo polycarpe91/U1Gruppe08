@@ -1,6 +1,9 @@
 package Servlets;
 
 import java.io.IOException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,9 +35,15 @@ public class Connection extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		traitement(request, response);
+		try {
+			traitement(request, response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -42,28 +51,42 @@ public class Connection extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		traitement(request, response);
+		try {
+			traitement(request, response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
 	public void traitement(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, SQLException {
 		String login=request.getParameter("login");
 		String password=request.getParameter("password");
-		
-		Login user=new Login(login,password);
-		HttpSession mysession=request.getSession();
-		mysession.setAttribute("utilisateur",user);
-		
-//		RequestDispatcher dispatcher=request.getRequestDispatcher("acceuille.jsp");
-		
 		RequestDispatcher dispatcher;
-		if("admi".equalsIgnoreCase(password) && "admi".equalsIgnoreCase(login)) {
-			dispatcher=request.getRequestDispatcher("accueille.jsp");
-		}else {
-			dispatcher=request.getRequestDispatcher("index.jsp");
-      	}
-		dispatcher.forward(request, response);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/iib2_ue1_gruppe08?useSSL=false", "root", "root");
+			java.sql.Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("Select login_username,login_password  from login where login_username= '"+login+"' and login_password= '"+password+"';");
+			if(rs.next()) {
+				Login user=new Login(login,password);
+				HttpSession mysession=request.getSession();
+				mysession.setAttribute("utilisateur",user);					
+				dispatcher=request.getRequestDispatcher("accueille.jsp");
+				}else {
+					dispatcher=request.getRequestDispatcher("index.jsp");
+		      	}
+				dispatcher.forward(request, response);
+		
+		
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 }

@@ -13,6 +13,7 @@
             Login user=(Login) session.getAttribute("utilisateur");
     
     %>
+    <a href="logout.jsp"> Logout</a>
     <h1>information von Benutzer</h1>
     <pre>
        Login:     <%= user.getLogin() %>
