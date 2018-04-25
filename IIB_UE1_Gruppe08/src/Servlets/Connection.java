@@ -75,7 +75,7 @@ public class Connection extends HttpServlet {
 				Login user=new Login(login,password);
 				HttpSession mysession=request.getSession();
 				mysession.setAttribute("utilisateur",user);					
-				dispatcher=request.getRequestDispatcher("accueille.jsp");
+				dispatcher=request.getRequestDispatcher("home.jsp");
 				}else {
 					dispatcher=request.getRequestDispatcher("index.jsp");
 		      	}
