@@ -1,4 +1,4 @@
-package dao;
+package DB_connect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,57 +6,64 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public final class DAOUtilitaire {
+public final class Connection_and_ResultSet_close {
 
-    private DAOUtilitaire() {
+    private Connection_and_ResultSet_close() {
     }
 
-    /* Fermeture silencieuse du resultset */
+    /* Silent closure resultset */
     public static void silentClosing( ResultSet resultSet ) {
         if ( resultSet != null ) {
             try {
                 resultSet.close();
             } catch ( SQLException e ) {
-                System.out.println( "Échec de la fermeture du ResultSet : " + e.getMessage() );
+                System.out.println( "failed to close ResultSet: " + e.getMessage() );
             }
         }
     }
 
-    /* Fermeture silencieuse du statement */
+    /* Silent closure statement */
     public static void silentClosing( Statement statement ) {
         if ( statement != null ) {
             try {
                 statement.close();
             } catch ( SQLException e ) {
-                System.out.println( "Échec de la fermeture du Statement : " + e.getMessage() );
+                System.out.println( "failed to close  Statement : " + e.getMessage() );
             }
         }
     }
 
-    /* Fermeture silencieuse de la connexion */
+    /* Silent closing of the connection */
     public static void silentClosing( Connection connexion ) {
         if ( connexion != null ) {
             try {
                 connexion.close();
             } catch ( SQLException e ) {
-                System.out.println( "Échec de la fermeture de la connexion : " + e.getMessage() );
+                System.out.println( "failed to close connexion : " + e.getMessage() );
             }
         }
     }
 
-    /* Fermetures silencieuses du statement et de la connexion */
+    /*Silent closures of statement and connection*/
     public static void silentClosing( Statement statement, Connection connexion ) {
     	silentClosing( statement );
     	silentClosing( connexion );
     }
 
-    /* Fermetures silencieuses du resultset, du statement et de la connexion */
+    /* Silent resultset, statement, and connection closures*/
     public static void silentClosing( ResultSet resultSet, Statement statement, Connection connexion ) {
     	silentClosing( resultSet );
     	silentClosing( statement );
     	silentClosing( connexion );
     }
-
+  /*The main feature of a PreparedStatement object is that, unlike a Statement object,
+   *  it is given a SQL statement when it is created. The advantage to this is that in
+   *   most cases, this SQL statement is sent to the DBMS right away, where it is compi
+   *   led. As a result, the PreparedStatement object contains not just a SQL statement,
+   *    but a SQL statement that has been precompiled. This means that when the PreparedStatement 
+   *    is executed, the DBMS can just run the PreparedStatement SQL statement without having to compile it first.
+   *    */
+   
     
     public static PreparedStatement initialisationRequetePreparee( Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );

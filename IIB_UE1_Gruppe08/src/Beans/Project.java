@@ -5,6 +5,11 @@ public class Project {
 	 private int project_id;
 	 private String project_name;
 	 private String project_anfang;
+	 private String project_end;
+	 
+	 
+	 
+	 
 	 public int getProject_id() {
 		return project_id;
 	}
@@ -29,7 +34,7 @@ public class Project {
 	public void setProject_end(String project_end) {
 		this.project_end = project_end;
 	}
-	private String project_end;
+
 	public Project() {
 		// TODO Auto-generated constructor stub
 	}

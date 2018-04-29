@@ -3,6 +3,7 @@
 	<name>IIB_UE1_Gruppe08</name>
 	<comment></comment>
 	<projects>
+		<project>mysql-connector-java-5.1.46</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
