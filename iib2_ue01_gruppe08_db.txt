@@ -1,19 +1,5 @@
-create database IIB2_UE1_Gruppe08;
-IIB2_UE1_Gruppe08;
-CREATE TABLE address (
-  address_id int(11) NOT NULL auto_increment,
-  address_country varchar(45) DEFAULT NULL,
-  address_Stadt varchar(45) DEFAULT NULL,
-  address_zipcode varchar(45) DEFAULT NULL,
-  address_strasse varchar(45) DEFAULT NULL,
-  PRIMARY KEY (address_id) );
-select * from address;
-INSERT INTO `address` VALUES 
-(1,'Deutchland','Dietzenbach','63128','Steinberg 60'),
-(2,'Deutchland','Darmstadt','64287','Franziska-Braun-Straße 10'),
-(3,'Deutchland','Frankfurt','60629','Theodor-W.-Adorno-Platz 6'),
-(4,'Deutchland','Berlin','10117','Friedrichstraße 43'),
-(5,'Deutchland','Darmstadt',' 64283','Luisenpl. 5');
+﻿create database IIB2_UE1_Gruppe08;
+use IIB2_UE1_Gruppe08;
 
 CREATE TABLE `taetigkeit` (
   `taetigkeit_id` int(11) NOT NULL,
@@ -26,22 +12,24 @@ INSERT INTO `taetigkeit` VALUES (1,'Bauleiter'),(2,'Nachtragmanager');
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `user_vorname` varchar(16) NOT NULL,
-  `user_nachname` varchar(45) NOT NULL,
+  `user_nachname` varchar(16) NOT NULL,
   `user_tel` varchar(16) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
+  `user_email` varchar(40) NOT NULL,
   `user_taetigkeit_id` int(11) NOT NULL,
-  `user_address_id` int(11) NOT NULL,
+  `user_land` varchar(20) DEFAULT NULL,
+  `user_stadt` varchar(20) DEFAULT NULL,
+  `user_plz` int(11) DEFAULT NULL, `user_adresse` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   KEY `fk_user_taetigkeit_idx` (`user_taetigkeit_id`),
-  KEY `fk_user_address1_idx` (`user_address_id`),
-  CONSTRAINT `fk_user_address1` FOREIGN KEY (`user_address_id`) REFERENCES `address` (`address_id`),
   CONSTRAINT `fk_user_taetigkeit` FOREIGN KEY (`user_taetigkeit_id`) REFERENCES `taetigkeit` (`taetigkeit_id`)
 );
-INSERT INTO `user` VALUES (1,'Jack','Morgen','031256489','j.morgen@xxx.xom',1,1),
-(2,'Anne','Vidne','01232569','a.vid@test.tes',1,2),
-(3,'Herr','Nachtragmanager','08-956524-2','h.manager@herr.man',2,3),
-(4,'Frau','Nachtragmanager','00528-255256','f.manager@frau.man',2,3);
+
+INSERT INTO `user` VALUES (1,'Jack','Morgen','031256489','j.morgen@xxx.xom',1,'Deutchland',
+'Dietzenbach','63128','Steinberg 60'),
+(2,'Anne','Vidne','01232569','a.vid@test.tes',1,'Deutchland','Darmstadt','64287','Franziska-Braun-Straße 10'),
+(3,'Herr','Nachtragmanager','08-956524-2','h.manager@herr.man',2,'Deutchland','Frankfurt','60629','Theodor-W.-Adorno-Platz 6'),
+(4,'Frau','Nachtragmanager','00528-255256','f.manager@frau.man',2,'Deutchland','Berlin','10117','Friedrichstraße 43');
 
 CREATE TABLE `login` (
   `login_id` int(11) NOT NULL,
@@ -59,18 +47,21 @@ INSERT INTO `login` VALUES (1,'user1','111111',1),
 (4,'Frau.N.Manager','444444',4);
 
 CREATE TABLE `project` (
-  `project_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(45) NOT NULL,
   `project_anfang` datetime DEFAULT NULL,
   `project_end` datetime DEFAULT NULL,
-  `project_address_id` int(11) NOT NULL,
+  `project_land` varchar(20) DEFAULT NULL,
+  `project_stadt` varchar(20) DEFAULT NULL,
+  `project_plz` int(11) DEFAULT NULL,
+  `project_adresse` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`project_id`),
-  UNIQUE KEY `project_id_UNIQUE` (`project_id`),
-  KEY `fk_project_address1_idx` (`project_address_id`),
-  CONSTRAINT `fk_project_address1` FOREIGN KEY (`project_address_id`) REFERENCES `address` (`address_id`)
+  UNIQUE KEY `project_id_UNIQUE` (`project_id`)
 );
-INSERT INTO `project` VALUES (1,'100B Hochhaus ','2017-01-01 00:00:00','2020-01-01 00:00:00',4),
-(2,'Darmstadt Brückenbau','2016-01-01 00:00:00','2018-01-01 00:00:00',5);
+
+
+INSERT INTO `project` VALUES (1,'100B Hochhaus ','2017-01-01 00:00:00','2020-01-01 00:00:00','Deutchland','Berlin','10117','Friedrichstraße 43'),
+(2,'Darmstadt Brückenbau','2016-01-01 00:00:00','2018-01-01 00:00:00','Deutchland','Darmstadt',' 64283','Luisenpl. 5');
 
 CREATE TABLE `user_hat_project` (
   `user_hat_project_id` int(11) NOT NULL,
