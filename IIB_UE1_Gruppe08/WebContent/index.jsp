@@ -12,7 +12,7 @@
   <section class="container">
     <div class="login">
       <h1>Login to Web App</h1>
-      <form methode="post" action="Login_User">
+      <form  action="Login_User"  methode ="post" >
 			<p><input type="text" name="login" value="" placeholder="Username"></p>
 			<p><input type="password" name="password" value="" placeholder="Password"></p>
             <p><input type="submit" value="Submit"></p>

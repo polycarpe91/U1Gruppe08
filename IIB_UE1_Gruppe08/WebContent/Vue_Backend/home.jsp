@@ -15,10 +15,9 @@
 		
 </head>
 <body class="landing">
-			    <%
-            Login user=(Login) session.getAttribute("utilisateur");
-    
-    %>
+			    <%Login user=(Login) session.getAttribute("utilisateur");
+			      String taetigkeit=(String) session.getAttribute("taetigkeit");
+			    %>
 	<div id="page-wrapper">
 
 			<!-- Header -->
@@ -26,7 +25,7 @@
 					
 					<nav id="nav">
 						<ul>
-							<li><a href="./Vue_Backend/home.html">Home</a></li>
+							<li><a href="./Vue_Backend/home.jsp">Home</a></li>
 							<li>
 								<a href="#" class="icon fa-angle-down">Leisung</a>
 								<ul>
@@ -51,10 +50,10 @@
 			<!-- Banner -->
 
 				<section id="banner">
-					<h2>Hallo <%= user.getLogin() %></h2>
+					<h2>Hallo <%= user.getLogin()+" ("+taetigkeit+")" %></h2>
 					<p>welcome to your Profile.</p>
 					<ul class="actions">
-						<li><a href="./Vue_Backend/project.html" class="button special">Projekts</a></li>
+						<li><a href="./Vue_Backend/user_Fronkend.jsp" class="button special">Projekts</a></li>
 						<li><a href="#" class="button">Nachrichts</a></li>
 					</ul>
 				</section>

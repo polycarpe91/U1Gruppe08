@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -66,24 +65,45 @@ public class Login_User extends HttpServlet {
 			throws ServletException, IOException, SQLException {
 		String login=request.getParameter("login");
 		String password=request.getParameter("password");
-		RequestDispatcher dispatcher;
 		//connection to Databank
 		Connection  con= databank.getInstance();
 		Statement st = con.createStatement();
-		String SQL_login="Select login_username,login_password  from login where login_username= '"+login+"' and login_password= '"+password+"';";
+		String SQL_login="Select * from iib2_ue1_gruppe08.login where login_username= '"+login+"' and login_password= '"+password+"';";
 		ResultSet rs = st.executeQuery(SQL_login);
+		String login_user_id = null;
 		if(rs.next()) {
-			Login user=new Login(login,password);
+		   login_user_id=rs.getString("login_user_id");
 			
-			HttpSession mysession=request.getSession();
-			mysession.setAttribute("utilisateur",user);
-			
-			dispatcher=request.getRequestDispatcher("./Vue_Backend/home.jsp");
-			}else {
-				dispatcher=request.getRequestDispatcher("index.jsp");
-		  	}
-			dispatcher.forward(request, response);
+		}
+		else {
+			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+	     }
+		System.out.println(login_user_id);
+		String SQL_Taetigkeit="SELECT taetigkeit_name FROM iib2_ue1_gruppe08.taetigkeit as T , "
+				+ "iib2_ue1_gruppe08.user as U ,iib2_ue1_gruppe08.login as L  where "
+				+ " U.user_taetigkeit_id=T.taetigkeit_id and  U.user_id ='"+login_user_id+"' LIMIT 1;";
+		Login user=new Login(login,password);
+		ResultSet rs2 = st.executeQuery(SQL_Taetigkeit);
+		String taetigkeit = null;
+		while(rs2.next()) {
+		   taetigkeit=rs2.getString("taetigkeit_name");
+		   System.out.println(taetigkeit );
 		
+				if(taetigkeit.equalsIgnoreCase("Bauleiter")){
+					HttpSession mysession=request.getSession();
+					mysession.setAttribute("utilisateur",user);
+					mysession.setAttribute("taetigkeit",taetigkeit);
+					
+					this.getServletContext().getRequestDispatcher("/Vue_Backend/home.jsp").forward(request, response);
+					}else {
+						HttpSession mysession=request.getSession();
+						mysession.setAttribute("utilisateur",user);
+						mysession.setAttribute("taetigkeit",taetigkeit);
+						this.getServletContext().getRequestDispatcher("/Vue_Backend/home.jsp").forward(request, response);
+					}
+			
+			}
+				
 		Connection_and_ResultSet_close.silentClosing(rs, st, con);
 		
 	}

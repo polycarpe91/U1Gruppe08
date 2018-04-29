@@ -26,7 +26,7 @@
 					
 					<nav id="nav">
 						<ul>
-							<li><a href="./Vue_Backend/home.html">Home</a></li>
+							<li><a href="./Vue_Backend/home.jsp">Home</a></li>
 							<li>
 								<a href="#" class="icon fa-angle-down">Leisung</a>
 								<ul>
@@ -54,7 +54,7 @@
 					<h2>Hallo <%= user.getLogin() %></h2>
 					<p>welcome to your Profile.</p>
 					<ul class="actions">
-						<li><a href="./Vue_Backend/project.html" class="button special">Projekts</a></li>
+						<li><a href="./Vue_Backend/user_Fronkend.jsp" class="button special">Projekts</a></li>
 						<li><a href="#" class="button">Nachrichts</a></li>
 					</ul>
 				</section>
