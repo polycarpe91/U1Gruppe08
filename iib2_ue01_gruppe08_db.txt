@@ -1,5 +1,5 @@
-create database iib2_ue1_gruppe08;
-use iib2_ue1_gruppe08;
+create database IIB2_UE1_Gruppe08;
+IIB2_UE1_Gruppe08;
 CREATE TABLE address (
   address_id int(11) NOT NULL auto_increment,
   address_country varchar(45) DEFAULT NULL,
