@@ -58,15 +58,6 @@ INSERT INTO `login` VALUES (1,'user1','111111',1),
 (2,'user2','222222',2),(3,'N.Manager','333333',3),
 (4,'Frau.N.Manager','444444',4);
 
-ALTER TABLE `iib2_ue1_gruppe08`.`login` 
-DROP COLUMN `login_id`,
-CHANGE COLUMN `login_password` `login_password` VARCHAR(256) NOT NULL ,
-DROP PRIMARY KEY,
-ADD PRIMARY KEY (`login_username`, `login_password`),
-ADD UNIQUE INDEX `login_username_UNIQUE` (`login_username` ASC),
-ADD UNIQUE INDEX `login_password_UNIQUE` (`login_password` ASC),
-DROP INDEX `login_id_UNIQUE` ;
-
 CREATE TABLE `project` (
   `project_id` int(11) NOT NULL,
   `project_name` varchar(45) NOT NULL,
