@@ -94,7 +94,7 @@ public class Login_User extends HttpServlet {
 					mysession.setAttribute("utilisateur",user);
 					mysession.setAttribute("taetigkeit",taetigkeit);
 					
-					this.getServletContext().getRequestDispatcher("/Vue_Backend/home.jsp").forward(request, response);
+					this.getServletContext().getRequestDispatcher("/Vue_Backend/bauleiter.jsp").forward(request, response);
 					}else {
 						HttpSession mysession=request.getSession();
 						mysession.setAttribute("utilisateur",user);
